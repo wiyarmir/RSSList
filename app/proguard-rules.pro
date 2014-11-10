@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# rules for RSS Library
+-dontwarn com.squareup.okhttp.**
