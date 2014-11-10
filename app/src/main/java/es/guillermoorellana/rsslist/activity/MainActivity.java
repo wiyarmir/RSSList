@@ -1,21 +1,22 @@
 package es.guillermoorellana.rsslist.activity;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 import es.guillermoorellana.rsslist.R;
+import es.guillermoorellana.rsslist.fragment.ConfigFragment;
+import es.guillermoorellana.rsslist.fragment.OnFragmentInteractionListener;
 import es.guillermoorellana.rsslist.fragment.SplashFragment;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnFragmentInteractionListener {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +24,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new SplashFragment())
+                    .add(
+                            R.id.container,
+                            SplashFragment.newInstance(
+                                    getResources().getInteger(R.integer.splash_timeout),
+                                    getString(R.string.splash_next_fragment)),
+                            SplashFragment.FRAGMENT_TAG
+                    )
                     .commit();
         }
     }
@@ -49,5 +56,21 @@ public class MainActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        if (uri.getScheme().equals("fragment")) {
+            String fragmentTag = uri.getHost();
+            Log.d(TAG, fragmentTag);
+            if (fragmentTag.equals("config")) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, new ConfigFragment(), ConfigFragment.FRAGMENT_TAG);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                //ft.setTransitionStyle(R.animator.fade_out);
+                ft.setCustomAnimations(0, R.animator.fade_out);
+                ft.commit();
+            }
+        }
     }
 }
