@@ -21,6 +21,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.pkmmte.pkrss:pkrss:1.0.1'
+    compile 'com.rometools:rome:1.5.0'
 
 }
