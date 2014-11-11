@@ -10,8 +10,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ebook11"
-        android:layout_gravity="center_horizontal|top"
+        android:layout_gravity="center"
         android:src="@drawable/ebook11"
         android:scaleType="center"
-        android:paddingTop="25dp" />
+        android:paddingBottom="60dp"
+        android:tint="@color/primary_dark" />
 </FrameLayout>

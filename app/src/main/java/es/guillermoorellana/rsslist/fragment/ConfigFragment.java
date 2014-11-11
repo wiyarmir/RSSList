@@ -2,52 +2,34 @@ package es.guillermoorellana.rsslist.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import es.guillermoorellana.rsslist.R;
+import es.guillermoorellana.rsslist.adapter.FeedAdapter;
+import es.guillermoorellana.rsslist.providers.DatabaseHelper;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link es.guillermoorellana.rsslist.fragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ConfigFragment#newInstance} factory method to
- * create an instance of this fragment.
+ *
  */
 public class ConfigFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    public static final String FRAGMENT_TAG = "config";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    public static final String FRAGMENT_TAG = "config";
+    private static final String TAG = "ConfigFragment";
+
 
     private OnFragmentInteractionListener mListener;
+    private ListView feedList;
+    private FeedAdapter feedAdapter;
+    private Cursor feedsCursor;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ConfigFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ConfigFragment newInstance(String param1, String param2) {
-        ConfigFragment fragment = new ConfigFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public ConfigFragment() {
         // Required empty public constructor
@@ -56,21 +38,39 @@ public class ConfigFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_config, container, false);
+        View v = inflater.inflate(R.layout.fragment_config, container, false);
+
+        feedsCursor = DatabaseHelper.getInstance().getAllFeedsCursor();
+
+        feedList = (ListView) v.findViewById(R.id.listView);
+        feedAdapter = new FeedAdapter(getActivity(), android.R.layout.simple_list_item_1, feedsCursor, new String[]{DatabaseHelper.KEY_FEED_TITLE}, new int[]{android.R.id.text1}, 0);
+        feedList.setAdapter(feedAdapter);
+        feedList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor c = (Cursor) parent.getItemAtPosition(position);
+                Log.d(TAG, c.getString(0) + c.getString(1) + c.getString(2));
+                Uri.Builder ub = new Uri.Builder();
+                ub.scheme("fragment");
+                ub.authority(RSSListFragment.FRAGMENT_TAG);
+                ub.appendQueryParameter(RSSListFragment.ARG_FEED_ID, c.getString(0));
+                ub.appendQueryParameter(RSSListFragment.ARG_FEED_TITLE, c.getString(1));
+                ub.appendQueryParameter(RSSListFragment.ARG_FEED_URL, c.getString(2));
+                onListItemClick(ub.build());
+            }
+        });
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onListItemClick(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }

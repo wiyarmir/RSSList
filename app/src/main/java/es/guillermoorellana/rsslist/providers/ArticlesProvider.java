@@ -1,4 +1,4 @@
-package es.guillermoorellana.rsslist.data;
+package es.guillermoorellana.rsslist.providers;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -8,7 +8,7 @@ import android.net.Uri;
 /**
  * Created by wiyarmir on 11/11/14.
  */
-public class FeedsProvider extends ContentProvider {
+public class ArticlesProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         return false;

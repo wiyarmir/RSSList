@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignEnd="@+id/listView"
+        android:layout_alignRight="@+id/listLayout"
+        android:layout_alignEnd="@+id/listLayout"
         android:id="@+id/addLayout">
 
         <TextView
@@ -55,14 +55,34 @@
 
     </LinearLayout>
 
-    <ListView
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/listLayout"
         android:layout_gravity="center"
         android:layout_below="@+id/addLayout"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/searchLayout" />
+        android:layout_above="@+id/searchLayout"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="List of added RSS"
+            android:id="@+id/textView3"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="5dp"
+            android:paddingTop="5dp" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/textView3" />
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"

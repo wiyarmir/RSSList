@@ -1,4 +1,4 @@
-package es.guillermoorellana.rsslist.data;
+package es.guillermoorellana.rsslist.providers;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String KEY_ARTICLE_NAME = "ARTICLE_NAME";
 
 
-    private DatabaseHelper mInstance;
+    private static DatabaseHelper mInstance;
 
     protected DatabaseHelper(Context c) {
         super(c, DATABASE_NAME, null, DATABASE_VERSION);
@@ -47,17 +47,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Singleton lazy instantiation
      *
      */
-    public DatabaseHelper getInstance() {
+    public static DatabaseHelper getInstance() {
         if (mInstance == null) {
             mInstance = new DatabaseHelper(RSSListApplication.getAppContext());
         }
         return mInstance;
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "Creating database");
+
         String CREATE_FEEDS_TABLE = String.format(
                 "CREATE TABLE %s (" +
                         "%s INTEGER PRIMARY KEY, " +
@@ -73,7 +73,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "%s TEXT, " +
                         "%s TEXT, " +
                         "%s INTEGER," +
-                        "FOREIGN KEY(%s) REFERENCES %s(%s)",
+                        "FOREIGN KEY(%s) REFERENCES %s(%s0)" +
+                        ")",
                 TABLE_ARTICLES,
                 KEY_ARTICLE_ID,
                 KEY_ARTICLE_NAME,
@@ -82,13 +83,53 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 KEY_PARENT_FEED_ID, TABLE_FEEDS, KEY_FEED_ID);
 
         db.execSQL(CREATE_ARTICLES_TABLE);
+
+        populateTestData(db);
+    }
+
+    private void wipeDatabase(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEEDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ARTICLES);
+    }
+
+    private void populateTestData(SQLiteDatabase db) {
+        String[][] data = new String[][]{
+                {"Android Developers Blog", "http://feeds.feedburner.com/blogspot/hsDu?format=xml"},
+                {"Android Police", "http://feeds.feedburner.com/AndroidPolice?format=xml"},
+                {"Android Official Blog", "http://feeds.feedburner.com/OfficialAndroidBlog?format=xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"},
+                {"TestFeed", "http://test.com/feed.xml"}
+        };
+        for (String strings[] : data) {
+            ContentValues values = new ContentValues();
+            values.put(KEY_FEED_TITLE, strings[0]);
+            values.put(KEY_FEED_URL, strings[1]);
+            db.insert(TABLE_FEEDS, null, values);
+        }
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.d(TAG, "wiping database");
         // this is the very only version, should not be called, but just in case...
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FEEDS);
+        wipeDatabase(db);
         onCreate(db);
     }
 

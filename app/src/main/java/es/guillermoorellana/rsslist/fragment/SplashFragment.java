@@ -58,12 +58,15 @@ public class SplashFragment extends Fragment {
             long mTimeout = getArguments().getLong(ARG_TIMEOUT);
             mNextFragment = getArguments().getString(ARG_NEXT_FRAGMENT);
 
-
+            Uri.Builder ub = new Uri.Builder();
+            ub.scheme("fragment");
+            ub.authority(mNextFragment);
+            final Uri uri = ub.build();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    onTimeoutExpired(Uri.parse("fragment://" + mNextFragment + "/"));
+                    onTimeoutExpired(uri);
                 }
             }, mTimeout);
         }

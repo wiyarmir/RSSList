@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import es.guillermoorellana.rsslist.R;
 import es.guillermoorellana.rsslist.fragment.ConfigFragment;
 import es.guillermoorellana.rsslist.fragment.OnFragmentInteractionListener;
+import es.guillermoorellana.rsslist.fragment.RSSListFragment;
 import es.guillermoorellana.rsslist.fragment.SplashFragment;
 
 
@@ -50,10 +51,6 @@ public class MainActivity extends Activity implements OnFragmentInteractionListe
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -63,12 +60,24 @@ public class MainActivity extends Activity implements OnFragmentInteractionListe
         if (uri.getScheme().equals("fragment")) {
             String fragmentTag = uri.getHost();
             Log.d(TAG, fragmentTag);
-            if (fragmentTag.equals("config")) {
+            if (fragmentTag.equals(ConfigFragment.FRAGMENT_TAG)) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.replace(R.id.container, new ConfigFragment(), ConfigFragment.FRAGMENT_TAG);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 //ft.setTransitionStyle(R.animator.fade_out);
                 ft.setCustomAnimations(0, R.animator.fade_out);
+                ft.commit();
+            } else if (fragmentTag.equals(RSSListFragment.FRAGMENT_TAG)) {
+                int feedId = Integer.parseInt(uri.getQueryParameter(RSSListFragment.ARG_FEED_ID));
+                String feedTitle = uri.getQueryParameter(RSSListFragment.ARG_FEED_TITLE);
+                String feedUrl = uri.getQueryParameter(RSSListFragment.ARG_FEED_URL);
+
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+                ft.add(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
+                ft.addToBackStack(null);
+                //ft.replace(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
+
                 ft.commit();
             }
         }
