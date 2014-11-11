@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="es.guillermoorellana.rsslist.activity.fragment.ConfigFragment">
 
@@ -39,8 +40,11 @@
                 android:layout_toLeftOf="@+id/b_rss"
                 android:hint="http://..."
                 android:singleLine="true"
+                android:imeActionLabel="Add"
+                android:imeActionId="@+id/add"
                 android:layout_alignWithParentIfMissing="false"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:inputType="textUri" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -50,6 +54,7 @@
                 android:layout_alignParentLeft="false"
                 android:layout_alignParentTop="false"
                 android:layout_alignParentRight="true"
+                android:imeOptions="actionGo"
                 android:layout_centerVertical="true" />
         </RelativeLayout>
 
@@ -63,7 +68,7 @@
         android:layout_below="@+id/addLayout"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/searchLayout"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
@@ -116,7 +121,7 @@
                 android:layout_alignParentTop="false"
                 android:layout_alignParentBottom="false"
                 android:layout_toLeftOf="@+id/b_search"
-                android:hint="http://..."
+                android:hint="e.g. science"
                 android:singleLine="true"
                 android:layout_alignWithParentIfMissing="false"
                 android:layout_centerVertical="true" />

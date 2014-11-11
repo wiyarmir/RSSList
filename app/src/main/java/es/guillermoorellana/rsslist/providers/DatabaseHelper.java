@@ -84,7 +84,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         db.execSQL(CREATE_ARTICLES_TABLE);
 
-        populateTestData(db);
+        // populateTestData(db);
     }
 
     private void wipeDatabase(SQLiteDatabase db) {
@@ -96,25 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String[][] data = new String[][]{
                 {"Android Developers Blog", "http://feeds.feedburner.com/blogspot/hsDu?format=xml"},
                 {"Android Police", "http://feeds.feedburner.com/AndroidPolice?format=xml"},
-                {"Android Official Blog", "http://feeds.feedburner.com/OfficialAndroidBlog?format=xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"},
-                {"TestFeed", "http://test.com/feed.xml"}
+                {"Android Official Blog", "http://feeds.feedburner.com/OfficialAndroidBlog?format=xml"}
         };
         for (String strings[] : data) {
             ContentValues values = new ContentValues();
@@ -136,7 +118,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void insertFeed(Feed f) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(KEY_FEED_TITLE, f.getName());
+        values.put(KEY_FEED_TITLE, f.getTitle());
         values.put(KEY_FEED_URL, f.getURL());
         db.insert(TABLE_FEEDS, null, values);
         db.close();

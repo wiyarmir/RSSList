@@ -10,8 +10,8 @@
         android:id="@+id/imageView"
         android:src="@drawable/polaroid2"
         android:layout_alignParentLeft="true"
-        android:padding="5dp"
-        android:layout_alignParentTop="true" />
+        android:layout_centerVertical="true"
+        android:padding="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -33,9 +33,12 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et lobortis dui. Etiam quis urna nunc. Donec gravida consequat ante, sed consectetur nunc ultricies ut. Sed id turpis in ex mollis tempor. Aliquam fringilla urna nunc, vitae cursus libero pellentesque vel. Etiam at lobortis dolor. Donec sed augue a leo."
         android:id="@android:id/text2"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_below="@android:id/text1"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:autoText="false"
-        android:ellipsize="end"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:ellipsize="end" />
 </RelativeLayout>

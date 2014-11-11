@@ -74,9 +74,8 @@ public class MainActivity extends Activity implements OnFragmentInteractionListe
 
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                ft.add(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
+                ft.replace(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
                 ft.addToBackStack(null);
-                //ft.replace(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
 
                 ft.commit();
             }

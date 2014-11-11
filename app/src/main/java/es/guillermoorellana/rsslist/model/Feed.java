@@ -1,27 +1,35 @@
 package es.guillermoorellana.rsslist.model;
 
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wiyarmir on 11/11/14.
  */
 public class Feed {
     private int id;
-    private String name;
+    private String title;
     private String URL;
+    private List<Article> articleList;
+    private String description;
 
     public Feed(int id, String name, String URL) {
         this.id = id;
-        this.name = name;
+        this.title = name;
         this.URL = URL;
+        articleList = new ArrayList<Article>();
     }
 
-    public String getName() {
-        return name;
+    public Feed() {
+        articleList = new ArrayList<Article>();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getURL() {
@@ -38,5 +46,25 @@ public class Feed {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setArticleList(List<Article> articleList) {
+        this.articleList = articleList;
+    }
+
+    public List<Article> getArticleList() {
+        return articleList;
+    }
+
+    public void addArticle(Article article) {
+        articleList.add(article);
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }
