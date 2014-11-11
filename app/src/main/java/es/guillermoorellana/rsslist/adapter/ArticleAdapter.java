@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import es.guillermoorellana.rsslist.R;
 import es.guillermoorellana.rsslist.model.Article;
@@ -27,7 +30,9 @@ import es.guillermoorellana.rsslist.model.Article;
  */
 public class ArticleAdapter extends ArrayAdapter<Article> {
 
+    private static final String TAG = "ArticleAdapter";
     private final int mResource;
+    protected Map<Integer, Bitmap> mBitmapCache;
 
     static class ViewHolder {
         private ImageView articleIcon;
@@ -38,6 +43,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     public ArticleAdapter(Context context, int resource, List<Article> objects) {
         super(context, resource, objects);
         mResource = resource;
+        mBitmapCache = new ConcurrentHashMap<Integer, Bitmap>();
     }
 
     @Override
@@ -60,26 +66,35 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         holder.articleTitle.setText(article.getTitle());
         holder.articleDescription.setText(Html.fromHtml(article.getDescription()));
 
-        // Since images are kinda small, it's worth caching them inside the POJO,
-        // but it won't be serializable anymore.
-        // Possible improvements, download all images in an independent and paralel fashion
-        // FIXME: it will bug when scrolled sort of fast
-        if(article.getCachedMedia() == null) {
-            holder.articleIcon.setImageResource(R.drawable.polaroid2);
-            new ImageAsyncLoadTask(holder.articleIcon).execute(article.getMediaUrl());
-        } else {
-            holder.articleIcon.setImageBitmap(article.getCachedMedia());
+
+        if (article.getMediaUrl() != null) {
+            if (mBitmapCache.containsKey(position)) {
+                holder.articleIcon.setImageBitmap(mBitmapCache.get(position));
+            } else {
+                holder.articleIcon.setImageResource(R.drawable.polaroid2);
+                new ImageAsyncLoadTask(holder.articleIcon, position).execute(article.getMediaUrl());
+            }
         }
 
+
         return convertView;
+    }
+
+    @Override
+    public void notifyDataSetInvalidated() {
+        // positions are no longer valid
+        mBitmapCache.clear();
+        super.notifyDataSetInvalidated();
     }
 
     private class ImageAsyncLoadTask extends AsyncTask<String, Void, Bitmap> {
 
         private final ImageView mImageView;
+        private int mPosition;
 
-        public ImageAsyncLoadTask(ImageView targetView) {
+        public ImageAsyncLoadTask(ImageView targetView, int position) {
             mImageView = targetView;
+            mPosition = position;
         }
 
         @Override
@@ -89,6 +104,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
                 InputStream in = new URL(urls[0]).openStream();
                 mIcon = BitmapFactory.decodeStream(in);
             } catch (MalformedURLException e) {
+                Log.e(TAG, "Offending URL:" + urls[0]);
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -99,6 +115,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             if (bitmap != null) {
+                mBitmapCache.put(mPosition, bitmap);
                 mImageView.setImageBitmap(bitmap);
             }
         }

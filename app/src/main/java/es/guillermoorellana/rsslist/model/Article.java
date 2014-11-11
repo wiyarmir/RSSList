@@ -1,6 +1,6 @@
 package es.guillermoorellana.rsslist.model;
 
-import android.graphics.Bitmap;
+import java.io.Serializable;
 
 import at.theengine.android.simple_rss2_android.RSSItem;
 
@@ -9,11 +9,10 @@ import at.theengine.android.simple_rss2_android.RSSItem;
  * <p/>
  * Created by wiyarmir on 11/11/14.
  */
-public class Article extends RSSItem {
+public class Article extends RSSItem implements Serializable {
 
 
     private String mediaUrl;
-    private Bitmap cachedMedia;
 
     @Override
     public String toString() {
@@ -39,11 +38,4 @@ public class Article extends RSSItem {
         this.mediaUrl = mediaUrl;
     }
 
-    public Bitmap getCachedMedia() {
-        return cachedMedia;
-    }
-
-    public void setCachedMedia(Bitmap cachedMedia) {
-        this.cachedMedia = cachedMedia;
-    }
 }

@@ -2,10 +2,13 @@ package es.guillermoorellana.rsslist.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -74,6 +77,8 @@ public class RSSListFragment extends ListFragment {
             mDataset = new ArrayList<Article>();
             mAdapter = new ArticleAdapter(getActivity(), R.layout.rss_list_item, mDataset);
             setListAdapter(mAdapter);
+
+
         } else {
             throw new RuntimeException("Invalid parameters in Bundle " + savedInstanceState.toString());
         }
@@ -82,7 +87,16 @@ public class RSSListFragment extends ListFragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Article a = (Article) adapterView.getItemAtPosition(position);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.replace(R.id.container, RSSDetailFragment.newInstance(a), RSSDetailFragment.FRAGMENT_TAG);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
         fetchFeed();
     }
 
@@ -92,17 +106,19 @@ public class RSSListFragment extends ListFragment {
             public void onFeedParsed(Feed feed) {
                 mDataset = feed.getArticleList();
                 Log.d(TAG, "Fetched: " + mDataset.size());
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.addAll(mDataset);
-                        mAdapter.notifyDataSetChanged();
-                        setListShown(true);
-                        if (mDataset.size() == 0) {
-                            Toast.makeText(getActivity(), "The RSS feed was empty!", Toast.LENGTH_LONG).show();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.addAll(mDataset);
+                            mAdapter.notifyDataSetChanged();
+                            setListShown(true);
+                            if (mDataset.size() == 0) {
+                                Toast.makeText(getActivity(), "The RSS feed was empty!", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             @Override

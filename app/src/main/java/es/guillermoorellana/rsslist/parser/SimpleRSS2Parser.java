@@ -2,7 +2,6 @@ package es.guillermoorellana.rsslist.parser;
 
 import android.os.AsyncTask;
 import android.sax.Element;
-import android.sax.ElementListener;
 import android.sax.EndElementListener;
 import android.sax.EndTextElementListener;
 import android.sax.RootElement;
@@ -112,7 +111,7 @@ public class SimpleRSS2Parser extends SimpleRss2Parser {
         });
         item.getChild(DESCRIPTION).setEndTextElementListener(new EndTextElementListener() {
             public void end(String body) {
-                currentMessage.setDescription(body);
+                currentMessage.setDescription(body.replaceAll("<img.+?>", ""));
             }
         });
         item.getChild("http://purl.org/rss/1.0/modules/content/", "encoded").setEndTextElementListener(new EndTextElementListener() {

@@ -159,6 +159,7 @@ public class ConfigFragment extends Fragment {
             ub.appendQueryParameter(RSSListFragment.ARG_FEED_ID, c.getString(0));
             ub.appendQueryParameter(RSSListFragment.ARG_FEED_TITLE, c.getString(1));
             ub.appendQueryParameter(RSSListFragment.ARG_FEED_URL, c.getString(2));
+
             onListItemClick(ub.build());
         }
     }
