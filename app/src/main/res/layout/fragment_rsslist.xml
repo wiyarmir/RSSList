@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="es.guillermoorellana.rsslist.fragment.RSSListFragment">
+    tools:context="es.guillermoorellana.rsslist.fragment.RSSListFragment"
+    android:background="@color/background">
 
     <ListView
         android:layout_width="wrap_content"

@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent"
+    android:background="@color/background"
+    android:padding="5dp">
     <!-- <div>Icon made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div> -->
 
     <LinearLayout
@@ -42,8 +44,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur et lobortis dui. Etiam quis urna nunc. Donec gravida consequat ante, sed consectetur nunc ultricies ut. Sed id turpis in ex mollis tempor. Aliquam fringilla urna nunc, vitae cursus libero pellentesque vel. Etiam at lobortis dolor. Donec sed augue a leo."
-            android:id="@android:id/text2"
-            android:padding="5dp" />
+            android:id="@android:id/text2" />
     </ScrollView>
 
 </RelativeLayout>

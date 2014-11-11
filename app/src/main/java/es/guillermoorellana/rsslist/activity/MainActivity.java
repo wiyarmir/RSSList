@@ -62,19 +62,21 @@ public class MainActivity extends Activity implements OnFragmentInteractionListe
             Log.d(TAG, fragmentTag);
             if (fragmentTag.equals(ConfigFragment.FRAGMENT_TAG)) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.setTransitionStyle(R.animator.fade_out);
+                ft.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
                 ft.replace(R.id.container, new ConfigFragment(), ConfigFragment.FRAGMENT_TAG);
-                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                //ft.setTransitionStyle(R.animator.fade_out);
-                ft.setCustomAnimations(0, R.animator.fade_out);
                 ft.commit();
             } else if (fragmentTag.equals(RSSListFragment.FRAGMENT_TAG)) {
                 int feedId = Integer.parseInt(uri.getQueryParameter(RSSListFragment.ARG_FEED_ID));
                 String feedTitle = uri.getQueryParameter(RSSListFragment.ARG_FEED_TITLE);
                 String feedUrl = uri.getQueryParameter(RSSListFragment.ARG_FEED_URL);
 
+                RSSListFragment rssListFragment = RSSListFragment.newInstance(feedId, feedTitle, feedUrl);
+
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-                ft.replace(R.id.container, RSSListFragment.newInstance(feedId, feedTitle, feedUrl), RSSListFragment.FRAGMENT_TAG);
+                ft.setCustomAnimations(R.animator.slide_in_right, 0,0 ,R.animator.slide_out_right);
+                ft.add(R.id.container, rssListFragment, RSSListFragment.FRAGMENT_TAG);
                 ft.addToBackStack(null);
 
                 ft.commit();

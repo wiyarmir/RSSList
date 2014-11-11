@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import es.guillermoorellana.rsslist.R;
 import es.guillermoorellana.rsslist.adapter.ArticleAdapter;
@@ -42,7 +41,6 @@ public class RSSListFragment extends ListFragment {
 
     private OnFragmentInteractionListener mListener;
     private ArticleAdapter mAdapter;
-    private List<Article> mDataset;
 
     /**
      * Use this factory method to create a new instance of
@@ -74,47 +72,47 @@ public class RSSListFragment extends ListFragment {
             mFeedTitle = getArguments().getString(ARG_FEED_TITLE);
             mFeedUrl = getArguments().getString(ARG_FEED_URL);
 
-            mDataset = new ArrayList<Article>();
-            mAdapter = new ArticleAdapter(getActivity(), R.layout.rss_list_item, mDataset);
-            setListAdapter(mAdapter);
-
-
         } else {
             throw new RuntimeException("Invalid parameters in Bundle " + savedInstanceState.toString());
         }
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getView().setBackgroundResource(R.color.background);
+
         getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Article a = (Article) adapterView.getItemAtPosition(position);
+                RSSDetailFragment rssDetailFragment = RSSDetailFragment.newInstance(a);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.container, RSSDetailFragment.newInstance(a), RSSDetailFragment.FRAGMENT_TAG);
+                ft.setCustomAnimations(R.animator.slide_in_up, 0, 0, R.animator.slide_out_down);
+                ft.add(R.id.container, rssDetailFragment, RSSDetailFragment.FRAGMENT_TAG);
                 ft.addToBackStack(null);
                 ft.commit();
             }
         });
+
         fetchFeed();
     }
 
     private void fetchFeed() {
         SimpleRSS2Parser parser = new SimpleRSS2Parser(mFeedUrl, new ParserCallback() {
             @Override
-            public void onFeedParsed(Feed feed) {
-                mDataset = feed.getArticleList();
-                Log.d(TAG, "Fetched: " + mDataset.size());
+            public void onFeedParsed(final Feed feed) {
+                Log.d(TAG, "Fetched: " + feed.getArticleList().size());
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter.addAll(mDataset);
-                            mAdapter.notifyDataSetChanged();
-                            setListShown(true);
-                            if (mDataset.size() == 0) {
+                            if (feed.getArticleList().size() == 0) {
                                 Toast.makeText(getActivity(), "The RSS feed was empty!", Toast.LENGTH_LONG).show();
+                            } else {
+                                mAdapter = new ArticleAdapter(getActivity(), R.layout.rss_list_item, feed.getArticleList());
+                                setListAdapter(mAdapter);
                             }
                         }
                     });

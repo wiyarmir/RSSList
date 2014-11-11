@@ -6,21 +6,23 @@ import android.sax.EndElementListener;
 import android.sax.EndTextElementListener;
 import android.sax.RootElement;
 import android.sax.StartElementListener;
+import android.util.Log;
 import android.util.Xml;
 
 import org.xml.sax.Attributes;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
-import at.theengine.android.simple_rss2_android.RSSItem;
-import at.theengine.android.simple_rss2_android.SimpleRss2Parser;
 import es.guillermoorellana.rsslist.model.Article;
 import es.guillermoorellana.rsslist.model.Feed;
 
 /**
  * Created by wiyarmir on 11/11/14.
  */
-public class SimpleRSS2Parser extends SimpleRss2Parser {
+public class SimpleRSS2Parser {
 
     private final String mUrl;
     private ParserCallback mCallback;
@@ -34,7 +36,6 @@ public class SimpleRSS2Parser extends SimpleRss2Parser {
     static final String ITEM = "item";
 
     public SimpleRSS2Parser(String feedUrl, ParserCallback callback) {
-        super(feedUrl, null);
         this.mUrl = feedUrl;
         this.mCallback = callback;
     }
@@ -43,7 +44,6 @@ public class SimpleRSS2Parser extends SimpleRss2Parser {
         AsyncTask task = new AsyncTask() {
 
             private Exception mEx;
-            private List<RSSItem> items;
             private Feed feed;
 
             @Override
@@ -140,8 +140,22 @@ public class SimpleRSS2Parser extends SimpleRss2Parser {
         try {
             Xml.parse(this.getInputStream(), Xml.Encoding.UTF_8, root.getContentHandler());
         } catch (Exception e) {
+            Log.e("", "Error parsing url " + mUrl);
             throw new RuntimeException(e);
         }
         return mFeed;
+    }
+
+    protected InputStream getInputStream() {
+        try {
+            HttpURLConnection conn = null;
+            conn = (HttpURLConnection) new URL(mUrl).openConnection();
+
+            return conn.getInputStream();
+            //return feedUrl.openConnection().getInputStream();
+        } catch (IOException e) {
+            Log.e("", "Error opening input stream for url" + mUrl);
+            throw new RuntimeException(e);
+        }
     }
 }

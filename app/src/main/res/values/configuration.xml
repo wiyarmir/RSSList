@@ -2,4 +2,6 @@
 <resources>
     <integer name="splash_timeout">3000</integer>
     <string name="splash_next_fragment">config</string>
+    <integer name="slide_animations_speed">@android:integer/config_shortAnimTime</integer>
+    <integer name="fade_animations_speed">@android:integer/config_longAnimTime</integer>
 </resources>

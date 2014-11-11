@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import es.guillermoorellana.rsslist.R;
@@ -40,6 +41,7 @@ public class ConfigFragment extends Fragment {
     private Cursor feedsCursor;
     private EditText mEditRSS;
     private Button bAddRSS;
+    private SearchView mSearchView;
 
 
     public ConfigFragment() {
@@ -81,6 +83,24 @@ public class ConfigFragment extends Fragment {
         bAddRSS = (Button) v.findViewById(R.id.b_rss);
         bAddRSS.setOnClickListener(new OnAddButtonClickListener());
 
+        mSearchView = (SearchView) v.findViewById(R.id.search);
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String arg0) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.equals("")) {/*
+                    updateCursor();*/
+                } else {/*
+                    ((SimpleCursorAdapter) getListAdapter()).changeCursor(dbh
+                            .getTasksSearchCursor(query));*/
+                }
+                return true;
+            }
+        });
         return v;
     }
 

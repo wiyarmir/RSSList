@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="es.guillermoorellana.rsslist.activity.fragment.ConfigFragment">
+    tools:context="es.guillermoorellana.rsslist.activity.fragment.ConfigFragment"
+    android:background="@color/background">
 
 
     <LinearLayout
@@ -113,18 +114,19 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical">
 
-            <EditText
+            <SearchView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/e_search"
+                android:id="@+id/search"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="false"
                 android:layout_alignParentBottom="false"
                 android:layout_toLeftOf="@+id/b_search"
-                android:hint="e.g. science"
                 android:singleLine="true"
                 android:layout_alignWithParentIfMissing="false"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true"
+                android:imeOptions="actionSearch"
+                android:iconifiedByDefault="false" />
 
             <Button
                 android:layout_width="wrap_content"

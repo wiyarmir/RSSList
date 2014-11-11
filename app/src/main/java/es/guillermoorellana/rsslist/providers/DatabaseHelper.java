@@ -94,9 +94,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void populateTestData(SQLiteDatabase db) {
         String[][] data = new String[][]{
-                {"Android Developers Blog", "http://feeds.feedburner.com/blogspot/hsDu?format=xml"},
                 {"Android Police", "http://feeds.feedburner.com/AndroidPolice?format=xml"},
-                {"Android Official Blog", "http://feeds.feedburner.com/OfficialAndroidBlog?format=xml"}
+                {"Yahoo News", "http://news.yahoo.com/rss/"}
         };
         for (String strings[] : data) {
             ContentValues values = new ContentValues();
