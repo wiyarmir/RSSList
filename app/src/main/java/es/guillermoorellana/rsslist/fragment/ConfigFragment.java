@@ -62,7 +62,12 @@ public class ConfigFragment extends Fragment {
 
         feedsCursor = DatabaseHelper.getInstance().getAllFeedsCursor();
 
-        feedAdapter = new FeedAdapter(getActivity(), android.R.layout.simple_list_item_1, feedsCursor, new String[]{DatabaseHelper.KEY_FEED_TITLE}, new int[]{android.R.id.text1}, 0);
+        feedAdapter = new FeedAdapter(getActivity(),
+                android.R.layout.simple_list_item_2,
+                feedsCursor,
+                new String[]{DatabaseHelper.KEY_FEED_TITLE, DatabaseHelper.KEY_FEED_URL},
+                new int[]{android.R.id.text1, android.R.id.text2},
+                0);
 
         feedList = (ListView) v.findViewById(R.id.listView);
         feedList.setAdapter(feedAdapter);
@@ -92,11 +97,13 @@ public class ConfigFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.equals("")) {/*
-                    updateCursor();*/
-                } else {/*
-                    ((SimpleCursorAdapter) getListAdapter()).changeCursor(dbh
-                            .getTasksSearchCursor(query));*/
+                if (query.equals("")) {
+                    updateCursor();
+                    feedAdapter.setHighlightKey(null);
+                } else {
+                    Cursor c = DatabaseHelper.getInstance().getFeedSearchCursor(query);
+                    feedAdapter.changeCursor(c);
+                    feedAdapter.setHighlightKey(query);
                 }
                 return true;
             }

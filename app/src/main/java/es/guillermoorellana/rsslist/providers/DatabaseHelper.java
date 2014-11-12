@@ -160,7 +160,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         return db.query(TABLE_FEEDS,
                 new String[]{KEY_FEED_ID, KEY_FEED_TITLE, KEY_FEED_URL},
-                KEY_FEED_TITLE + " LIKE ?", new String[]{search},
+                KEY_FEED_TITLE + " LIKE ? ", new String[]{'%' + search + '%'},
                 null, null, null, null);
     }
 
